@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>22212B22-2A1C-429E-BE8E-D5DFA93B33E2</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>CopyRelativePath</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)BaseCopyCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CopyIncludeCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CopyPathCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ExtensionPackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)FolderEditor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OptionPageGrid.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)SolutionSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)URLAtLineCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)URLCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <VSCTCompile Include="$(MSBuildThisFileDirectory)CopyRelativePathPackage.vsct">
+      <ResourceName>Menus.ctmenu</ResourceName>
+    </VSCTCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
