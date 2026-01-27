@@ -4,6 +4,8 @@
     <TargetFramework>net472</TargetFramework>
     <IsPackable>false</IsPackable>
     <RootNamespace>CopyRelativePath.Tests</RootNamespace>
+    <!-- 强制将所有 NuGet 依赖的 DLL 复制到 bin 目录 (CI 环境需要) -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,6 +13,11 @@
     <PackageReference Include="MSTest.TestAdapter" Version="4.0.2" />
     <PackageReference Include="MSTest.TestFramework" Version="4.0.2" />
     <PackageReference Include="Moq" Version="4.20.72" />
+    <!-- 直接引用 EnvDTE 互操作程序集 (CI 环境没有 VS 安装,无法从 GAC 加载) -->
+    <PackageReference Include="envdte" Version="17.10.40170" />
+    <PackageReference Include="envdte80" Version="17.10.40170" />
+    <PackageReference Include="stdole" Version="17.10.40170" />
+    <!-- 仅编译时引用 SDK,运行时使用上面的独立包 -->
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.0.206" ExcludeAssets="runtime" />
   </ItemGroup>
 
