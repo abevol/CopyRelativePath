@@ -6,6 +6,10 @@
     <RootNamespace>CopyRelativePath.Tests</RootNamespace>
     <!-- 强制将所有 NuGet 依赖的 DLL 复制到 bin 目录 (CI 环境需要) -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <!-- 禁用测试项目中的误报警告 -->
+    <!-- MSTEST0001: 测试并行化配置 - 小型测试项目不需要 -->
+    <!-- VSTHRD010: Mock 对象不在真实 UI 线程上,此警告为误报 -->
+    <NoWarn>$(NoWarn);MSTEST0001;VSTHRD010</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
