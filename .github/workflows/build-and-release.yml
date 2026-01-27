@@ -1,0 +1,102 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        target: [VS2019, VS2022_2026]
+        include:
+          - target: VS2019
+            project: CopyRelativePath.VS2019/CopyRelativePath.VS2019.csproj
+            vsix_name: CopyRelativePath-VS2019.vsix
+            output_path: CopyRelativePath.VS2019/bin/Release
+          - target: VS2022_2026
+            project: CopyRelativePath.VS2022_2026/CopyRelativePath.VS2022_2026.csproj
+            vsix_name: CopyRelativePath-VS2022_2026.vsix
+            output_path: CopyRelativePath.VS2022_2026/bin/Release
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@v1
+
+      - name: Restore NuGet packages
+        run: nuget restore CopyRelativePath.sln
+
+      - name: Run tests
+        run: dotnet test CopyRelativePath.Tests/CopyRelativePath.Tests.csproj --configuration Release --logger "console;verbosity=detailed"
+
+      - name: Build ${{ matrix.target }}
+        run: msbuild ${{ matrix.project }} /p:Configuration=Release /p:DeployExtension=false /v:minimal
+
+      - name: Upload VSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.vsix_name }}
+          path: ${{ matrix.output_path }}/*.vsix
+          if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Display structure of downloaded files
+        run: ls -R artifacts/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            artifacts/CopyRelativePath-VS2019.vsix/*.vsix
+            artifacts/CopyRelativePath-VS2022_2026.vsix/*.vsix
+          body: |
+            ## 支持的 Visual Studio 版本
+
+            | Visual Studio 版本 | 下载文件 | 说明 |
+            |-------------------|---------|------|
+            | **VS 2019** | `CopyRelativePath-VS2019.vsix` | 适用于 Visual Studio 2019 (32位架构) |
+            | **VS 2022** | `CopyRelativePath-VS2022_2026.vsix` | 适用于 Visual Studio 2022 (64位架构) |
+            | **VS 2026** | `CopyRelativePath-VS2022_2026.vsix` | 适用于 Visual Studio 2026 (64位架构,与 VS2022 二进制兼容) |
+
+            ### 如何选择正确的版本
+
+            - 如果您使用 **Visual Studio 2019**,请下载并安装 `CopyRelativePath-VS2019.vsix`
+            - 如果您使用 **Visual Studio 2022** 或 **Visual Studio 2026**,请下载并安装 `CopyRelativePath-VS2022_2026.vsix`
+
+            ### 安装方法
+
+            1. 下载对应版本的 `.vsix` 文件
+            2. 关闭所有 Visual Studio 实例
+            3. 双击 `.vsix` 文件启动安装程序
+            4. 按照安装向导完成安装
+            5. 重新启动 Visual Studio
+
+            ### 功能特性
+
+            本扩展提供以下高级路径复制命令:
+            - **Copy Relative Path**: 复制相对于解决方案根目录的相对路径
+            - **Copy URL**: 将相对路径附加到基础 URL (可在设置中配置)
+            - **Copy Current Line URL**: 复制包含行号的 URL 链接
+            - **Copy Include**: 复制移除 Include 目录前缀的路径 (用于 C/C++ 项目)
+
+            详细使用说明请参考 [README](https://github.com/${{ github.repository }}/blob/master/README.md)。
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
