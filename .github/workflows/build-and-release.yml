@@ -40,11 +40,19 @@ jobs:
       - name: Build ${{ matrix.target }}
         run: msbuild ${{ matrix.project }} /p:Configuration=Release /p:DeployExtension=false /v:minimal
 
+      - name: Rename VSIX file
+        run: |
+          $vsixFile = Get-ChildItem -Path "${{ matrix.output_path }}" -Filter "*.vsix" | Select-Object -First 1
+          $newName = "${{ matrix.vsix_name }}"
+          Rename-Item -Path $vsixFile.FullName -NewName $newName
+          Write-Host "Renamed $($vsixFile.Name) to $newName"
+        shell: pwsh
+
       - name: Upload VSIX artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.vsix_name }}
-          path: ${{ matrix.output_path }}/*.vsix
+          path: ${{ matrix.output_path }}/${{ matrix.vsix_name }}
           if-no-files-found: error
 
   release:
