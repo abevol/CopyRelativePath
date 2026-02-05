@@ -1,4 +1,4 @@
-﻿// Copyright (c) mere-human. All rights reserved.
+// Copyright (c) mere-human. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using EnvDTE;
@@ -67,9 +67,13 @@ namespace CopyRelativePath
         {
             get => DialogPage.OptionPrefix;
         }
-        public string OptionLineSuffix
+        public OptionPageGrid.LineSuffixType OptionLineSuffix
         {
             get => DialogPage.OptionLineSuffix;
+        }
+        public OptionPageGrid.LineSuffixType OptionLinePathSuffix
+        {
+            get => DialogPage.OptionLinePathSuffix;
         }
         public bool OptionIsForwardSlash
         {
@@ -104,6 +108,8 @@ namespace CopyRelativePath
             await URLCommand.InitializeAsync(this);
             await URLAtLineCommand.InitializeAsync(this);
             await CopyIncludeCommand.InitializeAsync(this);
+            await RelPathAtLineCommand.InitializeAsync(this);
+            await RelPathAtSelectedLinesCommand.InitializeAsync(this);
 
             DTE = (DTE2)await GetServiceAsync(typeof(DTE));
         }

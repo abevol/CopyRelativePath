@@ -1,4 +1,4 @@
-﻿// Copyright (c) mere-human. All rights reserved.
+// Copyright (c) mere-human. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using EnvDTE;
@@ -94,6 +94,36 @@ namespace CopyRelativePath
                 filePath = Path.Combine(package.OptionPrefix, filePath);
                 filePath = filePath.Replace(Path.DirectorySeparatorChar, '/');
                 return filePath;
+            }
+        }
+
+        protected string FormatLineNumber(int lineNumber, OptionPageGrid.LineSuffixType suffixType)
+        {
+            switch (suffixType)
+            {
+                case OptionPageGrid.LineSuffixType.Colon:
+                    return $":{lineNumber}";
+                case OptionPageGrid.LineSuffixType.HashL:
+                    return $"#L{lineNumber}";
+                case OptionPageGrid.LineSuffixType.Parenthesis:
+                    return $"({lineNumber})";
+                default:
+                    return $":{lineNumber}";
+            }
+        }
+
+        protected string FormatLineRange(int startLine, int endLine, OptionPageGrid.LineSuffixType suffixType)
+        {
+            switch (suffixType)
+            {
+                case OptionPageGrid.LineSuffixType.Colon:
+                    return $":{startLine}-{endLine}";
+                case OptionPageGrid.LineSuffixType.HashL:
+                    return $"#L{startLine}-L{endLine}";
+                case OptionPageGrid.LineSuffixType.Parenthesis:
+                    return $"({startLine},{endLine})";
+                default:
+                    return $":{startLine}-{endLine}";
             }
         }
 

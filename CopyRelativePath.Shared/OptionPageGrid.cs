@@ -1,4 +1,4 @@
-﻿// Copyright (c) mere-human. All rights reserved.
+// Copyright (c) mere-human. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using Microsoft.VisualStudio.Shell;
@@ -16,6 +16,16 @@ namespace CopyRelativePath
         public const string BehaviorCategoryName = "Behavior";
         public const string GlobalCategoryName = "Global";
         public const string PageName = "General";
+
+        public enum LineSuffixType
+        {
+            [Description(":")]
+            Colon,
+            [Description("#L")]
+            HashL,
+            [Description("(")]
+            Parenthesis
+        }
 
         [NonSerialized]
         private SolutionSettings _settings;
@@ -36,7 +46,12 @@ namespace CopyRelativePath
         [Category("URL")]
         [DisplayName("Line link suffix")]
         [Description("URL fragment that is used to refer to a specific line.\nExample result for #L: https://github.com/vim/vim/blob/master/Makefile#L100")]
-        public string OptionLineSuffix { get; set; } = "#L";
+        public LineSuffixType OptionLineSuffix { get; set; } = LineSuffixType.HashL;
+
+        [Category("Relative Path")]
+        [DisplayName("Line path suffix")]
+        [Description("Separator that is used between file path and line number for Copy Relative Path commands.\nExample: src/Main.cs:42 or src/Main.cs#L42 or src/Main.cs(42")]
+        public LineSuffixType OptionLinePathSuffix { get; set; } = LineSuffixType.Colon;
 
         [Category(BehaviorCategoryName)]
         [DisplayName("Use forward slash")]
@@ -91,7 +106,8 @@ namespace CopyRelativePath
                 OptionPrefix = _settings.Prefix;
                 OptionIsForwardSlash = _settings.UseForwardSlash;
                 OptionIncludeDirs = _settings.IncludeDirs;
-                OptionLineSuffix = _settings.LineSuffix;
+                OptionLineSuffix = ParseLineSuffixType(_settings.LineSuffix, LineSuffixType.HashL);
+                OptionLinePathSuffix = ParseLineSuffixType(_settings.LinePathSuffix, LineSuffixType.Colon);
             }
         }
 
@@ -103,7 +119,41 @@ namespace CopyRelativePath
                 settings.Prefix = OptionPrefix;
                 settings.UseForwardSlash = OptionIsForwardSlash;
                 settings.IncludeDirs = OptionIncludeDirs;
-                settings.LineSuffix = OptionLineSuffix;
+                settings.LineSuffix = GetLineSuffixString(OptionLineSuffix);
+                settings.LinePathSuffix = GetLineSuffixString(OptionLinePathSuffix);
+            }
+        }
+
+        private static string GetLineSuffixString(LineSuffixType type)
+        {
+            switch (type)
+            {
+                case LineSuffixType.Colon:
+                    return ":";
+                case LineSuffixType.HashL:
+                    return "#L";
+                case LineSuffixType.Parenthesis:
+                    return "(";
+                default:
+                    return "#L";
+            }
+        }
+
+        private static LineSuffixType ParseLineSuffixType(string suffix, LineSuffixType defaultValue)
+        {
+            if (string.IsNullOrEmpty(suffix))
+                return defaultValue;
+
+            switch (suffix)
+            {
+                case ":":
+                    return LineSuffixType.Colon;
+                case "#L":
+                    return LineSuffixType.HashL;
+                case "(":
+                    return LineSuffixType.Parenthesis;
+                default:
+                    return defaultValue;
             }
         }
 
