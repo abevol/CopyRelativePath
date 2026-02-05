@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <!--  This is the file that defines the actual layout and type of the commands.
@@ -55,22 +55,37 @@
       <Button guid="guidCopyRelativePathPackageCmdSet" id="RelCommandId" priority="0x0100" type="Button">
         <Strings>
           <ButtonText>Copy &amp;Relative Path</ButtonText>
+          <CanonicalName>CopyRelativePath.RelativePath</CanonicalName>
         </Strings>
       </Button>
       <Button guid="guidCopyRelativePathPackageCmdSet" id="IncludeCommandId" priority="0x0100" type="Button">
         <Strings>
           <ButtonText>Copy &amp;Include</ButtonText>
-          <ToolTipText>For C/C++ #include</ToolTipText>
+          <CanonicalName>CopyRelativePath.Include</CanonicalName>
         </Strings>
       </Button>
       <Button guid="guidCopyRelativePathPackageCmdSet" id="URLCommandId" priority="0x0100" type="Button">
         <Strings>
           <ButtonText>Copy &amp;URL</ButtonText>
+          <CanonicalName>CopyRelativePath.URL</CanonicalName>
         </Strings>
       </Button>
       <Button guid="guidCopyRelativePathPackageCmdSet" id="URLAtLineCommandId" priority="0x0100" type="Button">
         <Strings>
           <ButtonText>Copy Current Line &amp;URL</ButtonText>
+          <CanonicalName>CopyRelativePath.URLAtLine</CanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidCopyRelativePathPackageCmdSet" id="RelPathAtLineCommandId" priority="0x0100" type="Button">
+        <Strings>
+          <ButtonText>Copy Current Line Relative &amp;Path</ButtonText>
+          <CanonicalName>CopyRelativePath.RelPathAtLine</CanonicalName>
+        </Strings>
+      </Button>
+      <Button guid="guidCopyRelativePathPackageCmdSet" id="RelPathAtSelectedLinesCommandId" priority="0x0100" type="Button">
+        <Strings>
+          <ButtonText>Copy Selected Lines Relative Path</ButtonText>
+          <CanonicalName>CopyRelativePath.RelPathAtSelectedLines</CanonicalName>
         </Strings>
       </Button>
     </Buttons>
@@ -117,6 +132,12 @@
       <CommandPlacement guid="guidCopyRelativePathPackageCmdSet" id="URLAtLineCommandId" priority="0x0101">
         <Parent guid="guidCopyRelativePathPackageCmdSet" id="CodeCtxGroup"/>
       </CommandPlacement>
+      <CommandPlacement guid="guidCopyRelativePathPackageCmdSet" id="RelPathAtLineCommandId" priority="0x0102">
+        <Parent guid="guidCopyRelativePathPackageCmdSet" id="CodeCtxGroup"/>
+      </CommandPlacement>
+      <CommandPlacement guid="guidCopyRelativePathPackageCmdSet" id="RelPathAtSelectedLinesCommandId" priority="0x0103">
+        <Parent guid="guidCopyRelativePathPackageCmdSet" id="CodeCtxGroup"/>
+      </CommandPlacement>
 
     </CommandPlacements>
   </CommandPlacements>
@@ -138,6 +159,8 @@
       <IDSymbol name="IncludeCommandId" value="0x0300" />
       <IDSymbol name="URLCommandId" value="0x0200" />
       <IDSymbol name="URLAtLineCommandId" value="0x0400" />
+      <IDSymbol name="RelPathAtLineCommandId" value="0x0500" />
+      <IDSymbol name="RelPathAtSelectedLinesCommandId" value="0x0600" />
     </GuidSymbol>
 
   </Symbols>

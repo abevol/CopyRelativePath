@@ -18,6 +18,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)SolutionSettings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RelPathAtLineCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RelPathAtSelectedLinesCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)URLAtLineCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)URLCommand.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />

@@ -1,4 +1,4 @@
-﻿// Copyright (c) mere-human. All rights reserved.
+// Copyright (c) mere-human. All rights reserved.
 // Licensed under the MIT License. See License.txt in the project root for license information.
 
 using EnvDTE;
@@ -69,7 +69,6 @@ namespace CopyRelativePath
         private void Execute(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            ThreadHelper.ThrowIfNotOnUIThread();
             string filePath = GetURLPath();
             if (!string.IsNullOrEmpty(filePath))
             {
@@ -78,8 +77,7 @@ namespace CopyRelativePath
                     var textSel = package.DTE.ActiveDocument.Object("TextSelection") as TextSelection;
                     if (textSel != null)
                     {
-                        filePath += package.OptionLineSuffix.Length == 0 ? "#L" : package.OptionLineSuffix;
-                        filePath += textSel.CurrentLine.ToString();
+                        filePath += FormatLineNumber(textSel.CurrentLine, package.OptionLineSuffix);
                         Clipboard.SetText(filePath);
                     }
                 }
